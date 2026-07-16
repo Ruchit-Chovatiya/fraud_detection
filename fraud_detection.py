@@ -1,8 +1,17 @@
 import streamlit as st
 import pandas as pd
 import joblib
+import os
 
-model = joblib.load('fraud_detection_pipeline.pkl')
+@st.cache_resource
+def load_model():
+    model_path = 'fraud_detection_pipeline.pkl'
+    if not os.path.exists(model_path):
+        st.error(f"Model file not found: {model_path}")
+        st.stop()
+    return joblib.load(model_path)
+
+model = load_model()
 
 st.title('Fraud Detection Pipeline App')
 
